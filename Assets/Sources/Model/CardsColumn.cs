@@ -2,7 +2,7 @@
 
 namespace Assets.Sources.Model
 {
-    public class CardsColumn : ICopyable<CardsColumn>
+    public class CardsColumn : Transformable, ICopyable<CardsColumn>
     {
         private LinkedList<Card> _cards;
 
@@ -15,6 +15,7 @@ namespace Assets.Sources.Model
             _cards = cards;
         }
 
+        public IEnumerable<Card> Cards => new LinkedList<Card>(_cards);
         public Card VisibleCard => _cards.Last.Value;
         public bool IsEmpty => _cards.Count == 0;
 

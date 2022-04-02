@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Assets.Sources.Model
 {
-    public class Board : ICopyable<Board>
+    public class Board : Transformable, ICopyable<Board>
     {
         private List<CardsColumn> _columns;
 
@@ -20,6 +20,8 @@ namespace Assets.Sources.Model
         {
             _columns = columns;
         }
+
+        public IEnumerable<CardsColumn> Columns => new List<CardsColumn>(_columns);
 
         public void AddToColumn(Card card, int columnIndex)
         {

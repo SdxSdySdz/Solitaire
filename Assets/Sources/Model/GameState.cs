@@ -2,7 +2,7 @@ using Assets.Sources.Model.Exceptions;
 
 namespace Assets.Sources.Model
 {
-    public class GameState
+    public class GameState : Transformable
     {
         private Bank _bank;
         private Board _board;
@@ -16,6 +16,9 @@ namespace Assets.Sources.Model
             _lastMove = lastMove;
             _previousState = previousState;
         }
+
+        public Bank Bank => _bank;
+        public Board Board => _board;
 
         public static GameState CreateNewGame(Bank bank, Board board)
         {

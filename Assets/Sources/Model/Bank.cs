@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets.Sources.Model
 {
-    public class Bank : ICopyable<Bank>
+    public class Bank : Transformable, ICopyable<Bank>
     {
         private List<Card> _cards;
 
@@ -16,6 +17,7 @@ namespace Assets.Sources.Model
         }
 
         public Card VisibleCard => _cards[_cards.Count - 1];
+        public IEnumerable<Card> Cards => _cards.Select(card => card.Copy());
         public bool IsEmpty => _cards.Count == 0;
 
         public void Add(Card card)

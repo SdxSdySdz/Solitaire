@@ -2,7 +2,7 @@
 
 namespace Assets.Sources.Model
 {
-    public class Card : ICopyable<Card>
+    public class Card : Transformable, ICopyable<Card>
     {
         private FaceValue _faceValue;
         private Suit _suit;
