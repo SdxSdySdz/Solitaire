@@ -7,22 +7,37 @@ namespace Assets.Sources.Model
     {
         private LinkedList<Card> _cards;
 
+        public CardsColumn() : this(new LinkedList<Card>())
+        {
+        }
+
+        private CardsColumn(LinkedList<Card> cards)
+        {
+            _cards = cards;
+        }
+
         public Card VisibleCard => _cards.Last.Value;
 
         public bool IsEmpty => _cards.Count == 0;
 
         public void Add(Card card)
         {
-            VisibleCard.Hide();
+            if (IsEmpty == false)
+                VisibleCard.Hide();
+
             _cards.AddLast(card);
             card.Show();
         }
 
         public CardsColumn Copy()
         {
-            CardsColumn copy = new CardsColumn();
-            copy._cards = new LinkedList<Card>();
-            return copy;
+            LinkedList<Card> cardsCopy = new LinkedList<Card>();
+            foreach (Card card in _cards)
+            {
+                cardsCopy.AddLast(card.Copy());
+            }
+
+            return new CardsColumn(cardsCopy);
         }
 
         public Card Pop()

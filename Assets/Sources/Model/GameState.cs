@@ -1,5 +1,4 @@
 using Assets.Sources.Model.Exceptions;
-using System;
 
 namespace Assets.Sources.Model
 {
@@ -18,9 +17,9 @@ namespace Assets.Sources.Model
             _previousState = previousState;
         }
 
-        public static GameState CreateNewGame(Bank bank, int columnsCount)
+        public static GameState CreateNewGame(Bank bank, Board board)
         {
-            return new GameState(bank, new Board(columnsCount), null, null);
+            return new GameState(bank, board, null, null);
         }
 
         public GameState Apply(BankMove move)
@@ -44,6 +43,8 @@ namespace Assets.Sources.Model
 
             if (board.TryRemove(move.Card) == false)
                 throw new InvalidMoveException();
+
+            bank.ReplaceAsVisible(move.Card);
 
             return new GameState(bank, board, move, this);
         }

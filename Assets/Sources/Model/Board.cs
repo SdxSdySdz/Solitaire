@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Assets.Sources.Model
 {
@@ -11,13 +10,20 @@ namespace Assets.Sources.Model
         public Board(int columnsCount)
         {
             _columns = new List<CardsColumn>(columnsCount);
+            for (int i = 0; i < columnsCount; i++)
+            {
+                _columns.Add(new CardsColumn());
+            }
         }
 
-        private IEnumerable<Card> VisibleCards => _columns.Select(column => column.VisibleCard);
+        private Board(List<CardsColumn> columns)
+        {
+            _columns = columns;
+        }
 
         public void AddToColumn(Card card, int columnIndex)
         {
-            if (0 < columnIndex || columnIndex >= _columns.Count)
+            if (0 > columnIndex || columnIndex >= _columns.Count)
                 throw new ArgumentOutOfRangeException(nameof(columnIndex));
 
             _columns[columnIndex].Add(card);
@@ -25,7 +31,13 @@ namespace Assets.Sources.Model
 
         public Board Copy()
         {
-            throw new NotImplementedException();
+            List<CardsColumn> columnsCopy = new List<CardsColumn>(_columns.Count);
+            foreach (var column in _columns)
+            {
+                columnsCopy.Add(column.Copy());
+            }
+
+            return new Board(columnsCopy);
         }
 
         public bool TryRemove(Card card)
