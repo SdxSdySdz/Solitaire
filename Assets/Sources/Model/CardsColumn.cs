@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Assets.Sources.Model
 {
@@ -17,7 +16,6 @@ namespace Assets.Sources.Model
         }
 
         public Card VisibleCard => _cards.Last.Value;
-
         public bool IsEmpty => _cards.Count == 0;
 
         public void Add(Card card)

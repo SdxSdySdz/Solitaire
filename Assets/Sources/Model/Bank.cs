@@ -16,11 +16,12 @@ namespace Assets.Sources.Model
         }
 
         public Card VisibleCard => _cards[_cards.Count - 1];
+        public bool IsEmpty => _cards.Count == 0;
 
         public void Add(Card card)
         {
-            if (_cards.Count > 0)
-                _cards[_cards.Count - 1].Hide();
+            if (IsEmpty == false)
+                VisibleCard.Hide();
 
             _cards.Add(card);
             card.Show();
