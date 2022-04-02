@@ -1,16 +1,19 @@
 using Assets.Sources.Model;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BankPresenter : Presenter<Bank>
 {
     [SerializeField] private CardPresenter _cardPrefab;
+    [SerializeField] private Placer _placer;
 
     private List<CardPresenter> _cards;
 
+    private IEnumerable<Transform> Transforms => _cards.Select(x => x.transform);
+
     protected override void OnInit()
     {
-        Debug.LogError("Bank on init");
         _cards = new List<CardPresenter>();
 
         foreach (var card in Model.Cards)
@@ -20,16 +23,6 @@ public class BankPresenter : Presenter<Bank>
             _cards.Add(cardPresenter);
         }
 
-        PlaceCards();
-    }
-
-    private void PlaceCards()
-    {
-        Vector2 offset = Vector2.zero;
-        foreach (var card in _cards)
-        {
-            card.transform.position = transform.position + (Vector3)offset;
-            offset += Vector2.right;
-        }
+        _placer.PlaceAsChilds(Transforms);
     }
 }

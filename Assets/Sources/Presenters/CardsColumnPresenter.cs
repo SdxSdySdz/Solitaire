@@ -1,13 +1,16 @@
 using Assets.Sources.Model;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CardsColumnPresenter : Presenter<CardsColumn>
 {
     [SerializeField] private CardPresenter _cardPrefab;
+    [SerializeField] private Placer _placer;
 
     private List<CardPresenter> _cards = new List<CardPresenter>();
+
+    private IEnumerable<Transform> Transforms => _cards.Select(x => x.transform);
 
     protected override void OnInit()
     {
@@ -18,16 +21,6 @@ public class CardsColumnPresenter : Presenter<CardsColumn>
             _cards.Add(cardPresenter);
         }
 
-        PlaceCards();
-    }
-
-    private void PlaceCards()
-    {
-        Vector2 offset = Vector2.zero;
-        foreach (var card in _cards)
-        {
-            card.transform.position = transform.position + (Vector3)offset;
-            offset += Vector2.down;
-        }
+        _placer.PlaceAsChilds(Transforms);
     }
 }
