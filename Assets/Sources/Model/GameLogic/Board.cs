@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Assets.Sources.Model
+namespace Solitaire.Model.GameLogic
 {
-    public class Board : Transformable, ICopyable<Board>
+    public class Board : ICopyable<Board>
     {
         private List<CardsColumn> _columns;
 

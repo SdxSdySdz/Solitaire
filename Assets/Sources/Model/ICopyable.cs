@@ -1,4 +1,4 @@
-﻿namespace Assets.Sources.Model
+﻿namespace Solitaire.Model
 {
     public interface ICopyable<out T>
     {

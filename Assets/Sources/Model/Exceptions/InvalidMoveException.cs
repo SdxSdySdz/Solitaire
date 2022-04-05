@@ -1,4 +1,4 @@
-﻿namespace Assets.Sources.Model.Exceptions
+﻿namespace Solitaire.Model.Exceptions
 {
     public class InvalidMoveException : ModelException
     {

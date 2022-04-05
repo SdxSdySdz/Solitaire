@@ -1,12 +1,16 @@
 ﻿using System;
+using UnityEngine;
 
-namespace Assets.Sources.Model
+namespace Solitaire.Model.GameLogic
 {
-    public class Card : Transformable, ICopyable<Card>
+    public class Card : ICopyable<Card>
     {
         private FaceValue _faceValue;
         private Suit _suit;
         private bool _isVisible;
+
+        public event Action Showed;
+        public event Action Hided;
 
         public Card(FaceValue faceValue, Suit suit) : this(faceValue, suit, false)
         {
@@ -16,34 +20,34 @@ namespace Assets.Sources.Model
         {
             _faceValue = faceValue;
             _suit = suit;
-            _isVisible = isVisible;
+
+            if (isVisible)
+                Show();
+            else
+                Hide();
         }
 
-        public static bool operator==(Card a, Card b)
-        {
-            return a._faceValue == b._faceValue && a._suit == b._suit;
-        }
-
-        public static bool operator!=(Card a, Card b)
-        {
-            return a._faceValue != b._faceValue || a._suit != b._suit;
-        }
+        public FaceValue FaceValue => _faceValue;
+        public Suit Suit => _suit;
+        public bool IsVisible => _isVisible;
 
         public void Show()
         {
             _isVisible = true;
+            Showed?.Invoke();
         }
 
         public void Hide()
         {
             _isVisible = false;
+            Hided?.Invoke();
         }
 
         public bool IsNeighbor(Card other)
         {
             int facesCount = Enum.GetValues(typeof(FaceValue)).Length;
             int incrementedValue = ((int)_faceValue + 1) % facesCount;
-            int decrementedValue = ((int)_faceValue - 1) % facesCount;
+            int decrementedValue = ((int)_faceValue - 1 + facesCount) % facesCount;
             int otherValue = (int)other._faceValue;
 
             if (incrementedValue == otherValue)
