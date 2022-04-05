@@ -5,28 +5,27 @@ using UnityEngine;
 
 namespace Solitaire.Presenters
 {
-
-}
-public class CardsColumnPresenter : CardsCollectionPresenter<CardsColumn>
-{
-    protected override IEnumerable<Transform> Transforms => Cards.Select(card => card.transform);
-
-    protected override void OnEnableAndNotNullModel()
+    public class CardsColumnPresenter : CardsCollectionPresenter<CardsColumn>
     {
-        base.OnEnableAndNotNullModel();
-        Model.CardRemoved += OnCardRemoved;
-    }
+        protected override IEnumerable<Transform> Transforms => Cards.Select(card => card.transform);
 
-    protected override void OnDisableAndNotNullModel()
-    {
-        base.OnDisableAndNotNullModel();
-        Model.CardRemoved -= OnCardRemoved;
-    }
+        protected override void OnEnableAndNotNullModel()
+        {
+            base.OnEnableAndNotNullModel();
+            Model.CardRemoved += OnCardRemoved;
+        }
 
-    private void OnCardRemoved(Card card)
-    {
-        CardPresenter cardPresenter = Cards.First(presenter => presenter.Model == card);
-        cardPresenter.Clicked -= OnCardClicked;
-        Cards.Remove(cardPresenter);
+        protected override void OnDisableAndNotNullModel()
+        {
+            base.OnDisableAndNotNullModel();
+            Model.CardRemoved -= OnCardRemoved;
+        }
+
+        private void OnCardRemoved(Card card)
+        {
+            CardPresenter cardPresenter = Cards.First(presenter => presenter.Model == card);
+            cardPresenter.Clicked -= OnCardClicked;
+            Cards.Remove(cardPresenter);
+        }
     }
 }
