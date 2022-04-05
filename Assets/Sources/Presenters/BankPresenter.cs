@@ -1,28 +1,58 @@
-using Assets.Sources.Model;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
+using Solitaire.Model.GameLogic;
 using UnityEngine;
 
-public class BankPresenter : Presenter<Bank>
+namespace Solitaire.Presenters
 {
-    [SerializeField] private CardPresenter _cardPrefab;
-    [SerializeField] private Placer _placer;
-
-    private List<CardPresenter> _cards;
-
-    private IEnumerable<Transform> Transforms => _cards.Select(x => x.transform);
-
-    protected override void OnInit()
+    public class BankPresenter : CardsCollectionPresenter<Bank>
     {
-        _cards = new List<CardPresenter>();
+        [SerializeField] private Transform _combinationStartPoint;
 
-        foreach (var card in Model.Cards)
+        protected override IEnumerable<Transform> Transforms => Cards.Select(card => card.transform).SkipLast(1);
+
+        public void PlaceAtCombinationStart(CardPresenter card)
         {
-            CardPresenter cardPresenter = Instantiate(_cardPrefab, transform);
-            cardPresenter.Init(card);
-            _cards.Add(cardPresenter);
+            RemoveLastCard();
+
+            Cards.Add(card);
+            card.Clicked += OnCardClicked;
+
+            card.transform.DOMove(_combinationStartPoint.position, .5f);
         }
 
-        _placer.PlaceAsChilds(Transforms);
+        protected override void OnInit()
+        {
+            base.OnInit();
+            Cards.Last().transform.position = _combinationStartPoint.position;
+        }
+
+        protected override void OnEnableAndNotNullModel()
+        {
+            base.OnEnableAndNotNullModel();
+            Model.NextCardSet += OnNextCardSet;
+        }
+
+        protected override void OnDisableAndNotNullModel()
+        {
+            base.OnDisableAndNotNullModel();
+            Model.NextCardSet -= OnNextCardSet;
+        }
+
+        private void OnNextCardSet()
+        {
+            RemoveLastCard();
+
+            Cards[Cards.Count - 1].transform.DOMove(_combinationStartPoint.position, .5f);
+        }
+
+        private void RemoveLastCard()
+        {
+            int lastIndex = Cards.Count - 1;
+            Cards[lastIndex].Clicked -= OnCardClicked;
+            Destroy(Cards[lastIndex].gameObject);
+            Cards.RemoveAt(lastIndex);
+        }
     }
 }

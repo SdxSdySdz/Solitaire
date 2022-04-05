@@ -1,26 +1,32 @@
-using Assets.Sources.Model;
 using System.Collections.Generic;
 using System.Linq;
+using Solitaire.Model.GameLogic;
 using UnityEngine;
 
-public class CardsColumnPresenter : Presenter<CardsColumn>
+namespace Solitaire.Presenters
 {
-    [SerializeField] private CardPresenter _cardPrefab;
-    [SerializeField] private Placer _placer;
 
-    private List<CardPresenter> _cards = new List<CardPresenter>();
+}
+public class CardsColumnPresenter : CardsCollectionPresenter<CardsColumn>
+{
+    protected override IEnumerable<Transform> Transforms => Cards.Select(card => card.transform);
 
-    private IEnumerable<Transform> Transforms => _cards.Select(x => x.transform);
-
-    protected override void OnInit()
+    protected override void OnEnableAndNotNullModel()
     {
-        foreach (var card in Model.Cards)
-        {
-            CardPresenter cardPresenter = Instantiate(_cardPrefab, transform);
-            cardPresenter.Init(card);
-            _cards.Add(cardPresenter);
-        }
+        base.OnEnableAndNotNullModel();
+        Model.CardRemoved += OnCardRemoved;
+    }
 
-        _placer.PlaceAsChilds(Transforms);
+    protected override void OnDisableAndNotNullModel()
+    {
+        base.OnDisableAndNotNullModel();
+        Model.CardRemoved -= OnCardRemoved;
+    }
+
+    private void OnCardRemoved(Card card)
+    {
+        CardPresenter cardPresenter = Cards.First(presenter => presenter.Model == card);
+        cardPresenter.Clicked -= OnCardClicked;
+        Cards.Remove(cardPresenter);
     }
 }
