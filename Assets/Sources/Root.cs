@@ -11,12 +11,12 @@ public class Root : MonoBehaviour
 
     private void Awake()
     {
-        int columnsCount = 1;
-        int combinationsCount = 1;
-        int minCombinationLength = 5;
-        int maxCombinationLength = 5;
-        float ascendingChance = 0.0f;
-        float mirroringChance = 0.99f;
+        int columnsCount = 4;
+        int combinationsCount = 5;
+        int minCombinationLength = 2;
+        int maxCombinationLength = 7;
+        float ascendingChance = 0.65f;
+        float mirroringChance = 0.13f;
         _game = new CombinationBasedGenerator(
             columnsCount,
             combinationsCount,

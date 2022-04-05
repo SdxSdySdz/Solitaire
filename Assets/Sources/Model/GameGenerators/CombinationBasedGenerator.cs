@@ -32,7 +32,7 @@ namespace Solitaire.Model.GameGenerators
             _ascendingChance = ascendingChance;
             _mirroringChance = mirroringChance;
 
-            _random = new Random(42);
+            _random = new Random(1);
         }
 
         public override GameState Generate()
